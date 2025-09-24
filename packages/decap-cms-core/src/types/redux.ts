@@ -639,6 +639,7 @@ type CollectionObject = {
   view_filters: List<StaticallyTypedRecord<ViewFilter>>;
   view_groups: List<StaticallyTypedRecord<ViewGroup>>;
   nested?: Nested;
+  include_subfolders?: boolean | number;
   meta?: Meta;
   i18n: i18n;
 };

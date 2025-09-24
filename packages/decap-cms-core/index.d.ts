@@ -316,6 +316,7 @@ declare module 'decap-cms-core' {
       depth: number;
       subfolders?: boolean;
     };
+    include_subfolders?: boolean | number;
     meta?: { path?: { label: string; widget: string; index_file: string } };
 
     /**
