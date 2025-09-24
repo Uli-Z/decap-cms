@@ -86,6 +86,8 @@ import type { Map } from 'immutable';
 
 const { extractTemplateVars, dateParsers, expandPath } = stringTemplate;
 
+const DEFAULT_INCLUDE_SUBFOLDERS_DEPTH = 100;
+
 function updateAssetProxies(
   assetProxies: AssetProxy[],
   config: CmsConfig,
@@ -306,9 +308,16 @@ function prepareMetaPath(path: string, collection: Collection) {
 }
 
 function collectionDepth(collection: Collection) {
-  let depth;
-  depth =
+  let depth =
     collection.get('nested')?.get('depth') || getPathDepth(collection.get('path', '') as string);
+
+  const includeSubfolders = collection.get('include_subfolders');
+  if (typeof includeSubfolders === 'number') {
+    const normalized = includeSubfolders > 0 ? includeSubfolders : 1;
+    depth = Math.max(depth, normalized);
+  } else if (includeSubfolders) {
+    depth = Math.max(depth, DEFAULT_INCLUDE_SUBFOLDERS_DEPTH);
+  }
 
   if (hasI18n(collection)) {
     depth = getI18nFilesDepth(collection, depth);

@@ -4,6 +4,8 @@
 
 [decapcms.org](https://www.decapcms.org/)
 
+> **Update:** Folder collections can now automatically include entries from nested directories by setting `include_subfolders` to `true` or to a maximum depth in the collection configuration.
+
 A CMS for static site generators. Give users a simple way to edit
 and add content to any site built with a static site generator.
 

@@ -118,6 +118,84 @@ describe('Backend', () => {
     });
   });
 
+  describe('listEntries', () => {
+    let implementation;
+    let backend;
+    const util = require('decap-cms-lib-util');
+    const { Cursor } = util;
+
+    beforeEach(() => {
+      util.getPathDepth.mockImplementation(path => (path ? path.split('/').length : 1));
+      Cursor.create.mockReturnValue({
+        wrapData: jest.fn().mockReturnValue({ meta: undefined }),
+      });
+
+      const entries = [
+        {
+          file: { path: 'posts/test.md' },
+          data: '',
+        },
+      ];
+
+      implementation = {
+        init: jest.fn(() => implementation),
+        entriesByFolder: jest.fn().mockResolvedValue(entries),
+      };
+
+      backend = new Backend(implementation, { config: {}, backendName: 'github' });
+    });
+
+    afterEach(() => {
+      Cursor.create.mockReset();
+      util.getPathDepth.mockReset();
+    });
+
+    it('uses path depth when include_subfolders is not set', async () => {
+      const collection = fromJS({
+        name: 'posts',
+        folder: 'posts',
+        extension: 'md',
+        fields: [],
+        type: FOLDER,
+      });
+
+      await backend.listEntries(collection);
+
+      expect(implementation.entriesByFolder).toHaveBeenCalledWith('posts', 'md', 1);
+    });
+
+    it('expands depth when include_subfolders is true', async () => {
+      const collection = fromJS({
+        name: 'posts',
+        folder: 'posts',
+        extension: 'md',
+        fields: [],
+        type: FOLDER,
+        include_subfolders: true,
+      });
+
+      await backend.listEntries(collection);
+
+      const depth = implementation.entriesByFolder.mock.calls[0][2];
+      expect(depth).toBeGreaterThan(1);
+    });
+
+    it('uses numeric include_subfolders values as minimum depth', async () => {
+      const collection = fromJS({
+        name: 'posts',
+        folder: 'posts',
+        extension: 'md',
+        fields: [],
+        type: FOLDER,
+        include_subfolders: 7,
+      });
+
+      await backend.listEntries(collection);
+
+      expect(implementation.entriesByFolder).toHaveBeenCalledWith('posts', 'md', 7);
+    });
+  });
+
   describe('getLocalDraftBackup', () => {
     const { localForage, asyncLock } = require('decap-cms-lib-util');
 
