@@ -11,6 +11,7 @@ import { status } from '../../constants/publishModes';
 import { DragSource, DropTarget, HTML5DragDrop } from '../UI';
 import WorkflowCard from './WorkflowCard';
 import { selectEntryCollectionTitle } from '../../reducers/collections';
+import { getEntryPath } from '../../lib/urlHelper';
 
 const WorkflowListContainer = styled.div`
   min-height: 60%;
@@ -128,7 +129,7 @@ function getColumnHeaderText(columnName, t) {
   }
 }
 
-class WorkflowList extends React.Component {
+export class WorkflowList extends React.Component {
   static propTypes = {
     entries: ImmutablePropTypes.orderedMap,
     handleChangeStatus: PropTypes.func.isRequired,
@@ -213,7 +214,8 @@ class WorkflowList extends React.Component {
           const timestamp = dayjs(entry.get('updatedOn')).format(t('workflow.workflow.dateFormat'));
           const slug = entry.get('slug');
           const collectionName = entry.get('collection');
-          const editLink = `collections/${collectionName}/entries/${slug}?ref=workflow`;
+          const entryPath = getEntryPath(collectionName, slug);
+          const editLink = `${entryPath}?ref=workflow`;
           const ownStatus = entry.get('status');
           const collection = collections.find(
             collection => collection.get('name') === collectionName,

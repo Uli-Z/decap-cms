@@ -18,6 +18,34 @@
       },
       "2015-02-14-this-is-a-post-with-a-different-extension.other": {
         content: "---\ntitle: This post should not appear because the extension is different\nimage: /nf-logo.png\ndate: 2015-02-14T00:00:00.000Z\n---\n\n# I Am a Title in Markdown\n\nHello, world\n\n* One Thing\n* Another Thing\n* A Third Thing\n"
+      },
+      posts: {
+        "2024-08-19-nested-post.md": {
+          content: "---\ntitle: Nested Post 2024\ndate: 2024-08-19T12:00:00.000Z\n---\n\nNested posts folder entry.\n"
+        },
+        "shared-entry.md": {
+          content: "---\ntitle: Shared Entry (posts)\n---\n\nDuplicate name living under posts/.\n"
+        }
+      },
+      "deep space": {
+        "shared-entry.md": {
+          content: "---\ntitle: Shared Entry (deep space)\n---\n\nDuplicate name living under deep space/.\n"
+        },
+        "rocket 🚀": {
+          "countdown.md": {
+            content: "---\ntitle: Countdown 🚀\n---\n\nBlasting off soon.\n"
+          }
+        }
+      },
+      "unicode 子目录": {
+        "雨.md": {
+          content: "---\ntitle: 雨の中のエントリ\n---\n\nA rainy day entry with Unicode paths.\n"
+        }
+      },
+      "edge cases": {
+        "100% #hash?.md": {
+          content: "---\ntitle: Edge Case #100%\n---\n\nTesting reserved URL characters in filenames.\n"
+        }
       }
     },
     _faqs: {

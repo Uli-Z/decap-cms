@@ -17,6 +17,10 @@ collections: # A list of collections the CMS should be able to edit
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
     summary: '{{title}} -- {{year}}/{{month}}/{{day}}'
     create: true # Allow users to create new documents in this collection
+    include_subfolders: true
+    nested:
+      depth: 100
+      summary: '{{title}}'
     editor:
       visualEditing: true
     view_filters:

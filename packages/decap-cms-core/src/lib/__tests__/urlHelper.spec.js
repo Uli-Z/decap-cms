@@ -1,4 +1,10 @@
-import { sanitizeURI, sanitizeSlug, sanitizeChar } from '../urlHelper';
+import {
+  sanitizeURI,
+  sanitizeSlug,
+  sanitizeChar,
+  encodePathSegments,
+  getEntryPath,
+} from '../urlHelper';
 
 describe('sanitizeURI', () => {
   // `sanitizeURI` tests from RFC 3987
@@ -134,5 +140,25 @@ describe('sanitizeChar', () => {
 
   it('should sanitize whitespace with custom replacement', () => {
     expect(sanitizeChar(' ', { ...slugConfig, sanitize_replacement: '_' })).toBe('_');
+  });
+});
+
+describe('encodePathSegments', () => {
+  it('encodes each path segment while preserving slashes', () => {
+    expect(encodePathSegments('dir/child folder/file#one.md')).toEqual(
+      'dir/child%20folder/file%23one.md',
+    );
+  });
+
+  it('decodes already encoded segments before re-encoding', () => {
+    expect(encodePathSegments('nested/%7Bslug%7D')).toEqual('nested/%7Bslug%7D');
+  });
+});
+
+describe('getEntryPath', () => {
+  it('builds encoded entry path', () => {
+    expect(getEntryPath('posts', 'folder/a post')).toEqual(
+      '/collections/posts/entries/folder/a%20post',
+    );
   });
 });

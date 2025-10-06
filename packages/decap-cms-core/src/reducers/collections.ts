@@ -65,12 +65,16 @@ const selectors = {
     },
     entrySlug(collection: Collection, path: string) {
       const folder = (collection.get('folder') as string).replace(/\/$/, '');
-      const slug = path
-        .split(folder + '/')
-        .pop()
-        ?.replace(new RegExp(`\\.${escapeRegExp(this.entryExtension(collection))}$`), '');
+      const folderPrefix = `${folder}/`;
+      let relativePath = path;
+      if (relativePath.startsWith(folderPrefix)) {
+        relativePath = relativePath.slice(folderPrefix.length);
+      }
 
-      return slug;
+      return relativePath.replace(
+        new RegExp(`\\.${escapeRegExp(this.entryExtension(collection))}$`),
+        '',
+      );
     },
     allowNewEntries(collection: Collection) {
       return collection.get('create');

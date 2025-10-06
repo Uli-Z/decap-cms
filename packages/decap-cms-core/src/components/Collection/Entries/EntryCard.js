@@ -9,6 +9,7 @@ import { boundGetAsset } from '../../../actions/media';
 import { VIEW_STYLE_LIST, VIEW_STYLE_GRID } from '../../../constants/collectionViews';
 import { selectIsLoadingAsset } from '../../../reducers/medias';
 import { selectEntryCollectionTitle } from '../../../reducers/collections';
+import { getEntryPath } from '../../../lib/urlHelper';
 
 const ListCard = styled.li`
   ${components.card};
@@ -213,7 +214,7 @@ function mapStateToProps(state, ownProps) {
 
   return {
     summary,
-    path: `/collections/${collection.get('name')}/entries/${entry.get('slug')}`,
+    path: getEntryPath(collection.get('name'), entry.get('slug')),
     image,
     imageFolder: collection
       .get('fields')

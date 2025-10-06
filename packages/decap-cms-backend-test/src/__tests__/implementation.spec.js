@@ -262,5 +262,35 @@ describe('test backend implementation', () => {
         },
       ]);
     });
+
+    it('should handle folders and files with spaces and symbols', () => {
+      const tree = {
+        posts: {
+          'space dir': {
+            '#hash': {
+              'entry.md': {
+                content: 'hash entry',
+              },
+            },
+          },
+          'emoji 🚀': {
+            'lift-off.md': {
+              content: 'emoji entry',
+            },
+          },
+        },
+      };
+
+      expect(getFolderFiles(tree, 'posts', 'md', 4)).toEqual([
+        {
+          path: 'posts/emoji 🚀/lift-off.md',
+          content: 'emoji entry',
+        },
+        {
+          path: 'posts/space dir/#hash/entry.md',
+          content: 'hash entry',
+        },
+      ]);
+    });
   });
 });

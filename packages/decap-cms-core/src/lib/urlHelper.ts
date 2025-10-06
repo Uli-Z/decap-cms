@@ -21,6 +21,26 @@ export function getNewEntryUrl(collectionName: string, direct?: boolean) {
   return getUrl(`/collections/${collectionName}/new`, direct);
 }
 
+function tryDecodeURIComponent(segment: string) {
+  try {
+    return decodeURIComponent(segment);
+  } catch (e) {
+    return segment;
+  }
+}
+
+export function encodePathSegments(path: string) {
+  return path
+    .split('/')
+    .map(segment => encodeURIComponent(tryDecodeURIComponent(segment)))
+    .join('/');
+}
+
+export function getEntryPath(collectionName: string, slug: string, direct?: boolean) {
+  const encodedSlug = encodePathSegments(slug);
+  return getUrl(`/collections/${collectionName}/entries/${encodedSlug}`, direct);
+}
+
 export function addParams(urlString: string, params: Record<string, string>) {
   const parsedUrl = url.parse(urlString, true);
   parsedUrl.query = { ...parsedUrl.query, ...params };

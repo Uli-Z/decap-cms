@@ -81,6 +81,32 @@ describe('NestedCollection', () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
+  it('should encode complex folder names in links', () => {
+    const entries = fromJS([
+      { path: 'src/pages/index.md', data: { title: 'Root' } },
+      { path: 'src/pages/space dir/index.md', data: { title: 'Space Dir' } },
+      { path: 'src/pages/space dir/#hash/index.md', data: { title: 'Hash Entry' } },
+    ]);
+
+    const { getByTestId } = render(
+      <MemoryRouter>
+        <NestedCollection collection={collection} entries={entries} />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(getByTestId('/'));
+    fireEvent.click(getByTestId('/space dir'));
+
+    expect(getByTestId('/space dir')).toHaveAttribute(
+      'href',
+      '/collections/pages/filter/space%20dir',
+    );
+    expect(getByTestId('/space dir/#hash')).toHaveAttribute(
+      'href',
+      '/collections/pages/filter/space%20dir/%23hash',
+    );
+  });
+
   it('should keep expanded nodes on re-render', () => {
     const entries = fromJS([
       { path: 'src/pages/index.md', data: { title: 'Root' } },

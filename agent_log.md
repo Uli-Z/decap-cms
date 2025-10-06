@@ -1,0 +1,12 @@
+# Agent Log
+- Reviewed recent include_subfolders changes in decap-cms-core and backend implementations.
+- Implemented encoded route helper utilities and updated navigation, workflow, and collection components to use them.
+- Hardened slug derivation for nested folder entries and expanded unit coverage for urlHelper, history, collections, and test backend helpers.
+- Seeded dev-test fixtures with multi-level subfolders and edge-case filenames, enabling nested navigation configuration.
+- Added Cypress coverage for test backend collection subfolder flows and verified encoded URLs surface in the UI.
+- Exported `WorkflowList` for targeted testing and added a unit spec ensuring workflow cards link to encoded nested entry paths.
+- Ran `npm run test:unit -- --runTestsByPath packages/decap-cms-core/src/components/Workflow/__tests__/WorkflowList.spec.js` to verify the new workflow link coverage.
+- Formatted touched files and ran `npm run lint` to confirm style compliance (only existing minimatch warnings remain).
+- Executed `npm run type-check` to ensure TypeScript types remain valid.
+- Updated Collection snapshot for encoded paths and ran `npm run test:unit` to confirm the full Jest suite passes.
+- Attempted to run `npm run test:e2e -- --spec cypress/e2e/collection_subfolders_spec_test_backend.js`, but the container terminal crashed twice during the build phase (likely due to resource limits); manual rerun recommended externally.

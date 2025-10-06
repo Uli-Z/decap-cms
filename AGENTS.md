@@ -1,31 +1,33 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-Decap CMS is an Nx-managed workspace. Package code lives in `packages/*`, with `packages/decap-cms` shipping the browser bundle, `packages/decap-cms-core` holding shared logic, and adapters prefixed `decap-cms-backend-*` and `decap-cms-widget-*`. The demo site for manual QA resides in `dev-test/`. End-to-end fixtures and specs live in `cypress/`, while shared mocks sit under `__mocks__/`. Serverless helpers for hosted demos are in `functions/`.
+- Nx workspace; package code lives under `packages/`, with `packages/decap-cms` shipping the browser bundle and `packages/decap-cms-core` housing shared logic.
+- Backend and widget adapters follow the `decap-cms-backend-*` and `decap-cms-widget-*` naming pattern; update them in their respective package directories.
+- Demo site for manual QA is in `dev-test/`; E2E specs and fixtures reside in `cypress/`, and shared mocks live in `__mocks__/`.
+- Serverless helpers for hosted demos are in `functions/`; keep assets co-located with their feature modules.
 
 ## Build, Test, and Development Commands
-- `npm run start`: serve the demo CMS at `http://localhost:8080` using `dev-test/config.yml`.
-- `npm run develop`: run all packages’ watch tasks (except `decap-server`) via Nx.
-- `npm run build`: compile ESM bundles and package builds; use before publishing.
-- `npm run test`: run ESLint, TypeScript checks, and Jest suites.
-- `npm run test:all`: extend `npm run test` with Cypress e2e (bundles sample app first).
-- `npm run format`: apply ESLint fixes plus Prettier formatting.
+- `npm run start` – serve the demo CMS (uses `dev-test/config.yml`) at `http://localhost:8080`.
+- `npm run develop` – run Nx watch tasks across packages (excludes `decap-server`).
+- `npm run build` – produce ESM bundles and package artifacts; run before publishing.
+- `npm run test` – execute ESLint, TypeScript, and Jest suites; use `npm run test:all` to add Cypress runs.
+- `npm run format` – apply Prettier and ESLint fixes; commit formatted output only.
 
 ## Coding Style & Naming Conventions
-- Follow `.editorconfig`: 2-space indentation, UTF-8, no trailing whitespace, final newline.
-- Prettier enforces single quotes, trailing commas, max 100 columns; run `npm run format` before committing.
-- ESLint (`.eslintrc.js`) requires ordered imports and React best practices; allow console output only where intentional.
-- Prefer PascalCase for components, camelCase for utilities, and maintain `decap-cms-*` prefixes for packages, widgets, and backends.
-- Co-locate styles with components; lint CSS with `npm run lint:css`.
+- Follow `.editorconfig`: 2-space indentation, UTF-8, trim trailing whitespace, end files with a newline.
+- Prettier enforces single quotes, trailing commas, and a 100-column limit; run `npm run format` before PRs.
+- Use PascalCase for React components, camelCase for helpers, and keep package names prefixed with `decap-cms-*`.
 
 ## Testing Guidelines
-- Place unit specs in `src/__tests__/*.spec.[jt]s`; use @testing-library and keep snapshots in `__snapshots__/`.
-- Mock shared integrations via `__mocks__/` or package-local fixtures.
-- Run `npm run test` before every PR; use `npm run test:e2e` or `npm run test:e2e:dev` when touching workflows, auth flows, or widgets interacting with the demo app.
-- Update Cypress fixtures in `cypress/fixtures` alongside spec changes and regenerate recorded assets when behavior shifts.
+- Place unit specs in `src/__tests__/*.spec.[jt]s`, using @testing-library where applicable; snapshots belong in `__snapshots__/`.
+- Mock shared integrations via `__mocks__/` or package-specific fixtures; update `cypress/fixtures` alongside E2E changes.
+- Run `npm run test` locally before pushing; add `npm run test:e2e` when touching workflows, auth, or widget flows.
 
 ## Commit & Pull Request Guidelines
-Commits are linted with `@commitlint/config-conventional`; prefer `type(scope): subject` (e.g., `feat(core): allow nested folders`). Use present tense, keep subjects ≤72 characters, and squash incidental fixups locally. Branch from `main`, rebase before opening a PR, and link related issues (`Fixes #123`). PRs should summarise the change, list test coverage, and attach screenshots for UI updates. Request two maintainer reviews and wait for green CI before merge.
+- Commits follow `type(scope): subject` (≤72 chars) per `@commitlint/config-conventional`; squash fixups locally.
+- Branch from `main`, rebase before opening a PR, and link relevant issues (example: `Fixes #123`).
+- PRs should summarize changes, include test evidence, and attach screenshots for UI updates; wait for green CI and two maintainer reviews.
 
 ## Configuration & Debug Tips
-Customize `dev-test/config.yml` to mirror target deployments; clear the generated bundle with `npm run clean` if builds drift. When testing Git Gateway or Identity flows, run the mock server via `npm run mock:server:start` and point the CMS to the desired Netlify site through local storage as described in `CONTRIBUTING.md`.
+- Adjust `dev-test/config.yml` to mirror target deployments; run `npm run clean` if bundles drift.
+- For Git Gateway or Identity testing, start the mock server via `npm run mock:server:start` and set the target Netlify site through local storage as noted in `CONTRIBUTING.md`.

@@ -45,5 +45,15 @@ describe('history', () => {
       expect(history.replace).toHaveBeenCalledTimes(1);
       expect(history.replace).toHaveBeenCalledWith('/collections/posts/entries/index');
     });
+
+    it('should encode slug segments', () => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { navigateToEntry } = require('../history');
+
+      navigateToEntry('posts', 'nested folder/post #1');
+      expect(history.replace).toHaveBeenLastCalledWith(
+        '/collections/posts/entries/nested%20folder/post%20%231',
+      );
+    });
   });
 });

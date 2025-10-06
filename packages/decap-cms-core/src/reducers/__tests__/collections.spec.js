@@ -98,6 +98,30 @@ describe('collections', () => {
         ),
       ).toBe('dir1/dir2/slug');
     });
+
+    it('should preserve repeated folder names in nested paths', () => {
+      expect(
+        selectEntrySlug(
+          fromJS({
+            type: FOLDER,
+            folder: 'content/posts',
+          }),
+          'content/posts/posts/deeper/the-slug.md',
+        ),
+      ).toBe('posts/deeper/the-slug');
+    });
+
+    it('should return path unchanged when outside collection folder', () => {
+      expect(
+        selectEntrySlug(
+          fromJS({
+            type: FOLDER,
+            folder: 'content/posts',
+          }),
+          'content/other/file.md',
+        ),
+      ).toBe('content/other/file');
+    });
   });
 
   describe('selectFieldsMediaFolders', () => {

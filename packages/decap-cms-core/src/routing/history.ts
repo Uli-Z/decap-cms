@@ -1,5 +1,7 @@
 import { createHashHistory } from 'history';
 
+import { getEntryPath } from '../lib/urlHelper';
+
 const history = createHashHistory();
 
 export function navigateToCollection(collectionName: string) {
@@ -11,7 +13,7 @@ export function navigateToNewEntry(collectionName: string) {
 }
 
 export function navigateToEntry(collectionName: string, slug: string) {
-  return history.replace(`/collections/${collectionName}/entries/${slug}`);
+  return history.replace(getEntryPath(collectionName, slug));
 }
 
 export { history };

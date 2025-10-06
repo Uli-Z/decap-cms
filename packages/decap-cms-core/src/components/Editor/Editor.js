@@ -35,6 +35,7 @@ import { selectFields } from '../../reducers/collections';
 import { status, EDITORIAL_WORKFLOW } from '../../constants/publishModes';
 import EditorInterface from './EditorInterface';
 import withWorkflow from './withWorkflow';
+import { encodePathSegments } from '../../lib/urlHelper';
 
 export class Editor extends React.Component {
   static propTypes = {
@@ -443,7 +444,8 @@ function mapStateToProps(state, ownProps) {
   if (collection.has('nested') && slug) {
     const pathParts = slug.split('/');
     if (pathParts.length > 2) {
-      editorBackLink = `${editorBackLink}/filter/${pathParts.slice(0, -2).join('/')}`;
+      const filterPath = encodePathSegments(pathParts.slice(0, -2).join('/'));
+      editorBackLink = `${editorBackLink}/filter/${filterPath}`;
     }
   }
 

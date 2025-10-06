@@ -21,6 +21,7 @@ import Workflow from '../Workflow/Workflow';
 import Editor from '../Editor/Editor';
 import NotFoundPage from './NotFoundPage';
 import Header from './Header';
+import { getEntryPath } from '../../lib/urlHelper';
 
 TopBarProgress.config({
   barColors: {
@@ -246,7 +247,7 @@ class App extends React.Component {
               collections={collections}
               render={({ match }) => {
                 const { name, entryName } = match.params;
-                return <Redirect to={`/collections/${name}/entries/${entryName}`} />;
+                return <Redirect to={getEntryPath(name, entryName)} />;
               }}
             />
             <Route component={NotFoundPage} />

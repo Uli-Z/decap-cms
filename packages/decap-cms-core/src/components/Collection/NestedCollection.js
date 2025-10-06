@@ -13,6 +13,7 @@ import sortBy from 'lodash/sortBy';
 
 import { selectEntries } from '../../reducers/entries';
 import { selectEntryCollectionTitle } from '../../reducers/collections';
+import { encodePathSegments } from '../../lib/urlHelper';
 
 const { addFileTemplateFields } = stringTemplate;
 
@@ -91,7 +92,8 @@ function TreeNode(props) {
     }
     let to = `/collections/${collectionName}`;
     if (depth > 0) {
-      to = `${to}/filter${node.path}`;
+      const encodedPath = encodePathSegments(node.path);
+      to = encodeURI(`${to}/filter${encodedPath}`);
     }
     const title = getNodeTitle(node);
 

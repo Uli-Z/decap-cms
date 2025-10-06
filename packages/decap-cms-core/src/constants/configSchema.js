@@ -274,10 +274,7 @@ function getConfigSchema() {
               required: ['depth'],
             },
             include_subfolders: {
-              oneOf: [
-                { type: 'boolean' },
-                { type: 'number', minimum: 1, maximum: 1000 },
-              ],
+              oneOf: [{ type: 'boolean' }, { type: 'number', minimum: 1, maximum: 1000 }],
             },
             meta: {
               type: 'object',

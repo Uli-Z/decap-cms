@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { translate } from 'react-polyglot';
 import { lengths, components } from 'decap-cms-ui-default';
 
-import { getNewEntryUrl } from '../../lib/urlHelper';
+import { addParams, encodePathSegments, getNewEntryUrl } from '../../lib/urlHelper';
 import Sidebar from './Sidebar';
 import CollectionTop from './CollectionTop';
 import EntriesCollection from './Entries/EntriesCollection';
@@ -103,10 +103,9 @@ export class Collection extends React.Component {
 
     let newEntryUrl = collection.get('create') ? getNewEntryUrl(collectionName) : '';
     if (newEntryUrl && filterTerm) {
-      newEntryUrl = getNewEntryUrl(collectionName);
-      if (filterTerm) {
-        newEntryUrl = `${newEntryUrl}?path=${filterTerm}`;
-      }
+      newEntryUrl = addParams(getNewEntryUrl(collectionName), {
+        path: encodePathSegments(filterTerm),
+      });
     }
 
     const searchResultKey =

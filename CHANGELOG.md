@@ -2,6 +2,9 @@
 Decap CMS is a collection of npm packages with their own versions and changelogs, each listed
 below. The legacy pre-2.0 changelog is below as well.
 
+## Unreleased
+- Hardened folder collection subfolder support with encoded routing, nested fixtures, and regression tests.
+
 ## Core and distributions
 - [decap-cms](https://github.com/decaporg/decap-cms/blob/main/packages/decap-cms/CHANGELOG.md)
 - [decap-cms-core](https://github.com/decaporg/decap-cms/blob/main/packages/decap-cms-core/CHANGELOG.md)
