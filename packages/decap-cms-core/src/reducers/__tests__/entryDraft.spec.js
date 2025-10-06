@@ -1,7 +1,7 @@
 import { Map, fromJS } from 'immutable';
 
 import * as actions from '../../actions/entries';
-import reducer from '../entryDraft';
+import reducer, { selectCustomPath } from '../entryDraft';
 
 jest.mock('uuid', () => ({ v4: jest.fn(() => '1') }));
 
@@ -193,6 +193,73 @@ describe('entryDraft reducer', () => {
         },
         key: '',
       });
+    });
+  });
+
+  describe('selectCustomPath', () => {
+    const collection = fromJS({
+      folder: 'content/docs',
+      type: 'folder',
+      extension: 'md',
+      meta: { path: { widget: 'string', label: 'Path', index_file: 'index' } },
+    });
+
+    it('should return undefined when path metadata is missing', () => {
+      expect(selectCustomPath(collection, fromJS({ entry: { meta: {} } }))).toBeUndefined();
+    });
+
+    it('should build default index path for new entries', () => {
+      const customPath = selectCustomPath(
+        collection,
+        fromJS({ entry: { newRecord: true, meta: { path: 'tutorials' } } }),
+      );
+
+      expect(customPath).toBe('content/docs/tutorials/index.md');
+    });
+
+    it('should preserve existing filenames for persisted entries', () => {
+      const customPath = selectCustomPath(
+        collection,
+        fromJS({
+          entry: {
+            newRecord: false,
+            path: 'content/docs/tutorials/intro.md',
+            meta: { path: 'tutorials' },
+          },
+        }),
+      );
+
+      expect(customPath).toBe('content/docs/tutorials/intro.md');
+    });
+
+    it('should continue using the index file when the existing entry already matches', () => {
+      const customPath = selectCustomPath(
+        collection,
+        fromJS({
+          entry: {
+            newRecord: false,
+            path: 'content/docs/tutorials/index.md',
+            meta: { path: 'tutorials' },
+          },
+        }),
+      );
+
+      expect(customPath).toBe('content/docs/tutorials/index.md');
+    });
+
+    it('should retain filenames when moving entries back to the root', () => {
+      const customPath = selectCustomPath(
+        collection,
+        fromJS({
+          entry: {
+            newRecord: false,
+            path: 'content/docs/tutorials/intro.md',
+            meta: { path: '/' },
+          },
+        }),
+      );
+
+      expect(customPath).toBe('content/docs/intro.md');
     });
   });
 });

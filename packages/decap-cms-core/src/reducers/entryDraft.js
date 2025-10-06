@@ -1,7 +1,7 @@
 import { Map, List, fromJS } from 'immutable';
 import { v4 as uuid } from 'uuid';
 import get from 'lodash/get';
-import { join } from 'path';
+import { join, basename } from 'path';
 
 import {
   DRAFT_CREATE_FROM_ENTRY,
@@ -209,11 +209,29 @@ export function selectCustomPath(collection, entryDraft) {
     return;
   }
   const meta = entryDraft.getIn(['entry', 'meta']);
-  const path = meta && meta.get('path');
+  const metaPath = meta && meta.get('path');
+  if (!metaPath) {
+    return;
+  }
+
+  const folder = collection.get('folder');
   const indexFile = get(collection.toJS(), ['meta', 'path', 'index_file']);
   const extension = selectFolderEntryExtension(collection);
-  const customPath = path && join(collection.get('folder'), path, `${indexFile}.${extension}`);
-  return customPath;
+  const defaultFileName = `${indexFile}.${extension}`;
+  const newRecord = entryDraft.getIn(['entry', 'newRecord']);
+  const entryPath = entryDraft.getIn(['entry', 'path']);
+
+  if (!entryPath || newRecord) {
+    return join(folder, metaPath, defaultFileName);
+  }
+
+  const existingFileName = basename(entryPath);
+
+  if (!existingFileName || existingFileName === defaultFileName) {
+    return join(folder, metaPath, defaultFileName);
+  }
+
+  return join(folder, metaPath, existingFileName);
 }
 
 export default entryDraftReducer;
